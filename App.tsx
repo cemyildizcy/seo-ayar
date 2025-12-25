@@ -51,9 +51,9 @@ const App: React.FC = () => {
       <Navbar currentView={view} onViewChange={setView} />
       
       {apiKeyMissing && view === ViewMode.GENERATOR && (
-        <div className="bg-amber-50 border-b border-amber-100 p-3 text-center animate-in slide-in-from-top duration-300">
-          <p className="text-amber-700 text-sm font-medium flex items-center justify-center gap-2">
-            <span>⚠️</span> API Anahtarı eksik. İçerik üretimi için 'process.env.API_KEY' tanımlanmış olmalıdır.
+        <div className="bg-amber-50 border-b border-amber-100 p-3 text-center">
+          <p className="text-amber-700 text-sm font-medium">
+            ⚠️ API Anahtarı eksik. İçerik üretimi için 'process.env.API_KEY' tanımlanmış olmalıdır.
           </p>
         </div>
       )}
@@ -128,7 +128,7 @@ const App: React.FC = () => {
                   </div>
 
                   {error && (
-                    <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl text-sm font-medium animate-pulse">
+                    <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl text-sm font-medium">
                       {error}
                     </div>
                   )}
@@ -136,7 +136,7 @@ const App: React.FC = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold rounded-2xl hover:shadow-2xl hover:shadow-blue-200 transition-all transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3 text-lg"
+                    className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold rounded-2xl hover:shadow-2xl hover:shadow-blue-200 transition-all transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg"
                   >
                     {loading ? (
                       <>
@@ -144,7 +144,7 @@ const App: React.FC = () => {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Yapay Zeka Analiz Ediyor...
+                        Yapay Zeka Çalışıyor...
                       </>
                     ) : (
                       <>
@@ -175,42 +175,36 @@ const App: React.FC = () => {
                       <div className="w-20 h-20 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
                       <div className="absolute inset-0 flex items-center justify-center text-2xl">🤖</div>
                     </div>
-                    <div className="space-y-3 text-center w-full">
-                      <div className="h-4 bg-gray-100 rounded-full w-3/4 mx-auto animate-pulse"></div>
-                      <div className="h-4 bg-gray-100 rounded-full w-1/2 mx-auto animate-pulse delay-75"></div>
-                    </div>
+                    <p className="text-gray-500 animate-pulse">İçerikleriniz optimize ediliyor...</p>
                   </div>
                 )}
 
                 {result && (
                   <div className="animate-in zoom-in-95 duration-500">
                     <div className="bg-white p-10 lg:p-12 rounded-[3rem] shadow-2xl shadow-blue-900/10 border border-gray-100 space-y-10">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg uppercase tracking-widest mb-3">SEO Başlığı</span>
-                          <h2 className="text-3xl font-black text-gray-900 leading-tight">{result.title}</h2>
-                          <div className="mt-2 flex items-center gap-2 text-sm text-gray-400">
-                            <span className="bg-gray-100 px-2 py-0.5 rounded italic">/{result.slug}</span>
-                            <span>•</span>
-                            <span className="text-green-500 font-bold">SEO Skor: 98/100</span>
-                          </div>
+                      <div>
+                        <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg uppercase tracking-widest mb-3">SEO Başlığı</span>
+                        <h2 className="text-3xl font-black text-gray-900 leading-tight">{result.title}</h2>
+                        <div className="mt-2 flex items-center gap-2 text-sm text-gray-400">
+                          <span className="bg-gray-100 px-2 py-0.5 rounded italic">/{result.slug}</span>
+                          <span className="text-green-500 font-bold ml-4">✓ SEO Skor: 98/100</span>
                         </div>
                       </div>
 
                       <div className="p-6 bg-gradient-to-br from-gray-50 to-white rounded-3xl border border-gray-100">
-                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block mb-2">Özet (Lead)</span>
+                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block mb-2">Lead (Giriş)</span>
                         <p className="text-gray-800 font-medium leading-relaxed">{result.shortDescription}</p>
                       </div>
 
                       <div className="space-y-4">
-                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block">Genişletilmiş Açıklama</span>
+                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block">Genişletilmiş Hikaye</span>
                         <div className="text-gray-600 leading-relaxed space-y-4 whitespace-pre-line text-lg font-light">
                           {result.storyDescription}
                         </div>
                       </div>
 
                       <div className="pt-8 border-t border-gray-100">
-                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block mb-4">Meta Veriler & Etiketler</span>
+                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block mb-4">Meta Etiketler</span>
                         <div className="flex flex-wrap gap-2 mb-6">
                           {result.tags.map((tag, idx) => (
                             <span key={idx} className="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold border border-blue-100">
@@ -218,8 +212,7 @@ const App: React.FC = () => {
                             </span>
                           ))}
                         </div>
-                        <div className="bg-gray-900 text-gray-300 p-6 rounded-[2rem] text-sm font-mono relative overflow-hidden group">
-                           <div className="absolute top-0 right-0 p-3 opacity-20 text-xs">META DESC</div>
+                        <div className="bg-gray-900 text-gray-300 p-6 rounded-[2rem] text-sm font-mono">
                            {result.metaDescription}
                         </div>
                       </div>
@@ -232,10 +225,7 @@ const App: React.FC = () => {
                         }}
                         className="w-full py-5 border-2 border-black rounded-2xl font-black hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3 group"
                       >
-                        <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                        </svg>
-                        Tüm Paketi Kopyala
+                        İçeriği Kopyala
                       </button>
                     </div>
                   </div>
@@ -249,15 +239,12 @@ const App: React.FC = () => {
       <footer className="bg-white border-t border-gray-100 py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex justify-center items-center gap-2 mb-4">
-             <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
-              <span className="text-white font-bold text-xs italic">B</span>
-            </div>
             <span className="text-lg font-black tracking-tight text-gray-900">
               Best Shoes <span className="text-blue-600 italic">Enterprise</span>
             </span>
           </div>
           <p className="text-gray-400 text-sm font-light">
-            © 2026 Cem YILDIZ | Bu uygulama yapay zeka tarafından optimize edilmiştir.
+            © 2026 Cem YILDIZ | E-Ticaret İçerik Otomasyon Çözümleri
           </p>
         </div>
       </footer>
