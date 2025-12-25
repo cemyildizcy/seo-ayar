@@ -6,28 +6,35 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    // Global process nesnesi artık index.html'de tanımlandığı için güvenle erişilebilir
     const apiKey = window.process?.env?.API_KEY || '';
     this.ai = new GoogleGenAI({ apiKey: apiKey });
   }
 
   async generateProductContent(input: ProductInput): Promise<GeneratedContent> {
     const prompt = `
-      Sen premium bir ayakkabı markası olan 'Best Shoes' için kıdemli bir SEO Uzmanı ve Metin Yazarısın.
-      Aşağıdaki ürün detaylarını kullanarak Google aramalarında üst sıralarda çıkacak, dönüşüm odaklı ve hikayeleştirilmiş bir içerik oluştur.
-      
-      Ürün Adı: ${input.name}
-      Kategori: ${input.category}
-      Teknik Özellikler: ${input.features}
-      Hedef Kitle: ${input.targetAudience}
+      Sen premium bir ayakkabı markası olan 'Best Shoes' için çalışan, dünyanın en iyi SEO Stratejisti ve Kreatif Metin yazarısın.
+      Görevin: Aşağıdaki ürün verilerini kullanarak, müşteriyi duygusal olarak bağlayacak ve Google aramalarında ilk sayfaya taşıyacak profesyonel bir içerik paketi hazırlamak.
 
-      Lütfen şu yapıda bir JSON yanıtı döndür:
-      1. title: Dikkat çekici, SEO uyumlu ürün başlığı.
-      2. shortDescription: Ürünü özetleyen 2 cümlelik giriş.
-      3. storyDescription: En az 3 paragraftan oluşan, ürünün hissettirdiklerini ve kullanım alanlarını anlatan hikayeleştirilmiş açıklama.
-      4. metaDescription: Google arama sonuçları için 160 karakteri geçmeyen meta açıklama.
-      5. tags: En az 8 adet popüler ve alakalı SEO etiketi (dizi formatında).
-      6. slug: URL dostu format (örneğin: en-rahat-spor-ayakkabi-modelleri).
+      ÜRÜN VERİLERİ:
+      - Ürün İsmi: ${input.name}
+      - Kategori: ${input.category}
+      - Anahtar Özellikler: ${input.features}
+      - Hedef Kitle: ${input.targetAudience}
+
+      İÇERİK STANDARTLARIMIZ:
+      - Dil: Sofistike, güven verici, enerjik ve lüks.
+      - SEO: Semantik anahtar kelimeler kullan, başlıkta anahtar kelimeyi başa al.
+      - Hikaye: Ürünün sadece teknik özelliklerini değil, kullanıcıya katacağı özgüveni ve konforu anlat.
+
+      Lütfen şu JSON yapısında yanıt ver:
+      {
+        "title": "SEO uyumlu, tıklama oranı (CTR) yüksek başlık",
+        "shortDescription": "2 cümlelik, merak uyandıran özet",
+        "storyDescription": "En az 3 paragraf, giriş-gelişme-sonuç yapısında, ayakkabının üretim kalitesinden ve yarattığı histen bahseden hikayeleştirilmiş metin",
+        "metaDescription": "155-160 karakter arası, içinde 'Best Shoes' geçen ve aksiyon çağrısı (CTA) içeren meta açıklama",
+        "tags": ["SEO için 8-10 adet virgülle ayrılmış trend etiket"],
+        "slug": "url-dostu-kisa-link"
+      }
     `;
 
     const response = await this.ai.models.generateContent({
@@ -54,11 +61,10 @@ export class GeminiService {
     });
 
     try {
-      const jsonStr = response.text.trim();
-      return JSON.parse(jsonStr);
+      return JSON.parse(response.text.trim());
     } catch (error) {
-      console.error("JSON parsing error", error);
-      throw new Error("İçerik üretilirken bir hata oluştu.");
+      console.error("Content parsing error", error);
+      throw new Error("İçerik yapılandırılırken bir hata oluştu. Lütfen tekrar deneyin.");
     }
   }
 }

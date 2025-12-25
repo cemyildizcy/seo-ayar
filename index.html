@@ -4,40 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Shoes Content Generator</title>
+    <title>Best Shoes AI | Profesyonel SEO ve İçerik Asistanı</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Babel Standalone: Tarayıcıda TSX dosyasını anlık olarak derleyerek MIME tipi hatalarını önler -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <script>
-        // GitHub Pages ve diğer statik ortamlarda 'process is not defined' hatasını önlemek için yama
+        // Global process nesnesi tanımı (Referans hatalarını önler)
         window.process = {
             env: {
                 NODE_ENV: 'production',
-                API_KEY: '' // API Key, çalışma ortamı tarafından inject edilecektir
+                API_KEY: '' 
             }
         };
     </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9fafb;
+            background-color: #f8fafc;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
         }
+        /* Custom scrollbar for premium look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3"
-  }
-}
-</script>
+    <script type="importmap">
+    {
+      "imports": {
+        "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3"
+      }
+    }
+    </script>
 </head>
 <body>
     <div id="root"></div>
-    <!-- GitHub Pages subpath uyumluluğu için göreceli yol -->
-    <script type="module" src="./index.tsx"></script>
+    <!-- type="text/babel" ve data-presets kullanımı GitHub Pages'deki MIME tipi kontrolünü bypass eder -->
+    <script type="text/babel" data-presets="react,typescript" data-type="module" src="./index.tsx"></script>
 </body>
 </html>
