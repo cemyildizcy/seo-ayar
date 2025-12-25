@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ProjectDocument from './components/ProjectDocument';
 import { GeminiService } from './geminiService';
@@ -10,6 +10,15 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GeneratedContent | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [apiKeyMissing, setApiKeyMissing] = useState(false);
+
+  useEffect(() => {
+    // API anahtarının yüklü olup olmadığını kontrol et
+    const key = typeof process !== 'undefined' ? process.env.API_KEY : null;
+    if (!key) {
+      setApiKeyMissing(true);
+    }
+  }, []);
 
   const [input, setInput] = useState<ProductInput>({
     name: '',
@@ -20,6 +29,10 @@ const App: React.FC = () => {
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (apiKeyMissing) {
+      setError('Hata: API Anahtarı bulunamadı. Lütfen çevre değişkenlerini kontrol edin.');
+      return;
+    }
     if (!input.name || !input.features) {
       setError('Lütfen ürün adı ve özelliklerini doldurun.');
       return;
@@ -42,6 +55,14 @@ const App: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar currentView={view} onViewChange={setView} />
       
+      {apiKeyMissing && view === ViewMode.GENERATOR && (
+        <div className="bg-amber-50 border-b border-amber-200 p-4 text-center">
+          <p className="text-amber-800 text-sm font-medium">
+            ⚠️ <strong>Dikkat:</strong> API anahtarı algılanamadı. Uygulamanın çalışması için geçerli bir Gemini API anahtarı gereklidir.
+          </p>
+        </div>
+      )}
+
       <main className="flex-grow">
         {view === ViewMode.DOCUMENTATION ? (
           <ProjectDocument />
@@ -113,7 +134,7 @@ const App: React.FC = () => {
 
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || apiKeyMissing}
                     className="w-full py-4 bg-black text-white font-bold rounded-2xl hover:bg-gray-800 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {loading ? (

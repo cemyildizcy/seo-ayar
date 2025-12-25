@@ -6,8 +6,9 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    // Correctly using process.env.API_KEY directly for initialization
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // Tarayıcı ortamında process.env bulunmayabileceği için güvenli kontrol
+    const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : '';
+    this.ai = new GoogleGenAI({ apiKey: apiKey || '' });
   }
 
   async generateProductContent(input: ProductInput): Promise<GeneratedContent> {
@@ -29,7 +30,6 @@ export class GeminiService {
       6. slug: URL dostu format (örneğin: en-rahat-spor-ayakkabi-modelleri).
     `;
 
-    // Using ai.models.generateContent to query GenAI with both model and contents
     const response = await this.ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: prompt,
@@ -54,7 +54,6 @@ export class GeminiService {
     });
 
     try {
-      // Accessing text as a property on the response object and trimming whitespace
       const jsonStr = response.text.trim();
       return JSON.parse(jsonStr);
     } catch (error) {
