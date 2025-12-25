@@ -10,7 +10,6 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script>
-        // Global process nesnesi tanımı (Referans hatalarını önler)
         window.process = {
             env: {
                 NODE_ENV: 'production',
@@ -26,7 +25,6 @@
             padding: 0;
             -webkit-font-smoothing: antialiased;
         }
-        /* Premium Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -46,11 +44,11 @@
 <body>
     <div id="root"></div>
     
-    <!-- Giriş noktası inline hale getirilerek MIME tipi hatası (octet-stream) bypass edildi -->
     <script type="text/babel" data-presets="react,typescript" data-type="module">
         import React from 'react';
         import ReactDOM from 'react-dom/client';
-        import App from './App';
+        // Uzantı eklenmesi 404 hatasını çözer
+        import App from './App.tsx';
 
         const rootElement = document.getElementById('root');
         if (rootElement) {

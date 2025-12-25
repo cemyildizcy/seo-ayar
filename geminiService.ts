@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { GeneratedContent, ProductInput } from "./types";
+import { GeneratedContent, ProductInput } from "./types.ts";
 
 export class GeminiService {
   private ai: GoogleGenAI;
@@ -21,19 +21,14 @@ export class GeminiService {
       - Anahtar Özellikler: ${input.features}
       - Hedef Kitle: ${input.targetAudience}
 
-      İÇERİK STANDARTLARIMIZ:
-      - Dil: Sofistike, güven verici, enerjik ve lüks.
-      - SEO: Semantik anahtar kelimeler kullan, başlıkta anahtar kelimeyi başa al.
-      - Hikaye: Ürünün sadece teknik özelliklerini değil, kullanıcıya katacağı özgüveni ve konforu anlat.
-
       Lütfen şu JSON yapısında yanıt ver:
       {
-        "title": "SEO uyumlu, tıklama oranı (CTR) yüksek başlık",
-        "shortDescription": "2 cümlelik, merak uyandıran özet",
-        "storyDescription": "En az 3 paragraf, giriş-gelişme-sonuç yapısında, ayakkabının üretim kalitesinden ve yarattığı histen bahseden hikayeleştirilmiş metin",
-        "metaDescription": "155-160 karakter arası, içinde 'Best Shoes' geçen ve aksiyon çağrısı (CTA) içeren meta açıklama",
-        "tags": ["SEO için 8-10 adet virgülle ayrılmış trend etiket"],
-        "slug": "url-dostu-kisa-link"
+        "title": "SEO uyumlu başlık",
+        "shortDescription": "2 cümlelik özet",
+        "storyDescription": "Hikayeleştirilmiş metin",
+        "metaDescription": "Meta açıklama",
+        "tags": ["etiket1", "etiket2"],
+        "slug": "url-link"
       }
     `;
 
@@ -49,10 +44,7 @@ export class GeminiService {
             shortDescription: { type: Type.STRING },
             storyDescription: { type: Type.STRING },
             metaDescription: { type: Type.STRING },
-            tags: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING }
-            },
+            tags: { type: Type.ARRAY, items: { type: Type.STRING } },
             slug: { type: Type.STRING }
           },
           required: ["title", "shortDescription", "storyDescription", "metaDescription", "tags", "slug"]
@@ -63,8 +55,7 @@ export class GeminiService {
     try {
       return JSON.parse(response.text.trim());
     } catch (error) {
-      console.error("Content parsing error", error);
-      throw new Error("İçerik yapılandırılırken bir hata oluştu. Lütfen tekrar deneyin.");
+      throw new Error("İçerik yapılandırılırken bir hata oluştu.");
     }
   }
 }

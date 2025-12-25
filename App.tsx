@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import ProjectDocument from './components/ProjectDocument';
-import { GeminiService } from './geminiService';
-import { GeneratedContent, ProductInput, ViewMode } from './types';
+import Navbar from './components/Navbar.tsx';
+import ProjectDocument from './components/ProjectDocument.tsx';
+import { GeminiService } from './geminiService.ts';
+import { GeneratedContent, ProductInput, ViewMode } from './types.ts';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>(ViewMode.GENERATOR);
@@ -65,7 +65,6 @@ const App: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-16">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
               
-              {/* Form Section */}
               <div className="space-y-10">
                 <div className="space-y-4">
                   <h1 className="text-5xl font-black text-gray-900 tracking-tight leading-tight">
@@ -138,43 +137,22 @@ const App: React.FC = () => {
                     disabled={loading}
                     className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold rounded-2xl hover:shadow-2xl hover:shadow-blue-200 transition-all transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg"
                   >
-                    {loading ? (
-                      <>
-                        <svg className="animate-spin h-6 w-6 text-white" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Yapay Zeka Çalışıyor...
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-xl">✨</span> SEO İçeriği Oluştur
-                      </>
-                    )}
+                    {loading ? "Yapay Zeka Çalışıyor..." : "SEO İçeriği Oluştur"}
                   </button>
                 </form>
               </div>
 
-              {/* Result Section */}
               <div className="lg:sticky lg:top-24">
                 {!result && !loading && (
                   <div className="h-[600px] flex flex-col items-center justify-center text-center p-12 bg-white rounded-[3rem] border-2 border-dashed border-gray-200 shadow-sm">
-                    <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
-                      <span className="text-5xl">🎯</span>
-                    </div>
+                    <span className="text-5xl mb-6">🎯</span>
                     <h3 className="text-2xl font-bold text-gray-900 mb-3">İçerik Hazır Değil</h3>
-                    <p className="text-gray-400 text-lg max-w-sm font-light">
-                      Ürün verilerini girin ve yapay zekanın markanız için en iyisini üretmesini bekleyin.
-                    </p>
                   </div>
                 )}
 
                 {loading && (
                   <div className="h-[600px] bg-white rounded-[3rem] p-12 shadow-xl border border-gray-100 flex flex-col justify-center items-center gap-6">
-                    <div className="relative">
-                      <div className="w-20 h-20 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
-                      <div className="absolute inset-0 flex items-center justify-center text-2xl">🤖</div>
-                    </div>
+                    <div className="w-20 h-20 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
                     <p className="text-gray-500 animate-pulse">İçerikleriniz optimize ediliyor...</p>
                   </div>
                 )}
@@ -185,48 +163,13 @@ const App: React.FC = () => {
                       <div>
                         <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg uppercase tracking-widest mb-3">SEO Başlığı</span>
                         <h2 className="text-3xl font-black text-gray-900 leading-tight">{result.title}</h2>
-                        <div className="mt-2 flex items-center gap-2 text-sm text-gray-400">
-                          <span className="bg-gray-100 px-2 py-0.5 rounded italic">/{result.slug}</span>
-                          <span className="text-green-500 font-bold ml-4">✓ SEO Skor: 98/100</span>
-                        </div>
                       </div>
-
                       <div className="p-6 bg-gradient-to-br from-gray-50 to-white rounded-3xl border border-gray-100">
-                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block mb-2">Lead (Giriş)</span>
                         <p className="text-gray-800 font-medium leading-relaxed">{result.shortDescription}</p>
                       </div>
-
-                      <div className="space-y-4">
-                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block">Genişletilmiş Hikaye</span>
-                        <div className="text-gray-600 leading-relaxed space-y-4 whitespace-pre-line text-lg font-light">
-                          {result.storyDescription}
-                        </div>
+                      <div className="text-gray-600 leading-relaxed space-y-4 whitespace-pre-line text-lg font-light">
+                        {result.storyDescription}
                       </div>
-
-                      <div className="pt-8 border-t border-gray-100">
-                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block mb-4">Meta Etiketler</span>
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {result.tags.map((tag, idx) => (
-                            <span key={idx} className="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold border border-blue-100">
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="bg-gray-900 text-gray-300 p-6 rounded-[2rem] text-sm font-mono">
-                           {result.metaDescription}
-                        </div>
-                      </div>
-
-                      <button 
-                        onClick={() => {
-                          const text = `BAŞLIK: ${result.title}\n\nURL: /${result.slug}\n\nÖZET: ${result.shortDescription}\n\nAÇIKLAMA:\n${result.storyDescription}\n\nETİKETLER: ${result.tags.join(', ')}\n\nMETA: ${result.metaDescription}`;
-                          navigator.clipboard.writeText(text);
-                          alert('Profesyonel içerik panoya kopyalandı! 🚀');
-                        }}
-                        className="w-full py-5 border-2 border-black rounded-2xl font-black hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3 group"
-                      >
-                        İçeriği Kopyala
-                      </button>
                     </div>
                   </div>
                 )}
@@ -235,19 +178,6 @@ const App: React.FC = () => {
           </div>
         )}
       </main>
-
-      <footer className="bg-white border-t border-gray-100 py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="flex justify-center items-center gap-2 mb-4">
-            <span className="text-lg font-black tracking-tight text-gray-900">
-              Best Shoes <span className="text-blue-600 italic">Enterprise</span>
-            </span>
-          </div>
-          <p className="text-gray-400 text-sm font-light">
-            © 2026 Cem YILDIZ | E-Ticaret İçerik Otomasyon Çözümleri
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };
