@@ -7,10 +7,21 @@
     <title>Best Shoes Content Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // GitHub Pages ve diğer statik ortamlarda 'process is not defined' hatasını önlemek için yama
+        window.process = {
+            env: {
+                NODE_ENV: 'production',
+                API_KEY: '' // API Key, çalışma ortamı tarafından inject edilecektir
+            }
+        };
+    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f9fafb;
+            margin: 0;
+            padding: 0;
         }
     </style>
 <script type="importmap">
@@ -26,7 +37,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Giriş noktasını açıkça belirtiyoruz. GitHub Pages'de çalışması için ./ kullanımı önemlidir. -->
+    <!-- GitHub Pages subpath uyumluluğu için göreceli yol -->
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>

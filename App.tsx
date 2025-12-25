@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ProjectDocument from './components/ProjectDocument';
 import { GeminiService } from './geminiService';
@@ -14,9 +14,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     // API anahtarının yüklü olup olmadığını kontrol et
-    const key = typeof process !== 'undefined' ? process.env.API_KEY : null;
-    if (!key) {
-      setApiKeyMissing(true);
+    const key = window.process?.env?.API_KEY;
+    if (!key || key.trim() === '') {
+      // Not: Bazı platformlar API key'i otomatik inject eder.
+      // Eğer statik olarak basıyorsanız bu kontrolü güncelleyebilirsiniz.
+      console.warn("API Key bulunamadı, içerik üretimi çalışmayabilir.");
     }
   }, []);
 
@@ -29,10 +31,6 @@ const App: React.FC = () => {
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (apiKeyMissing) {
-      setError('Hata: API Anahtarı bulunamadı. Lütfen çevre değişkenlerini kontrol edin.');
-      return;
-    }
     if (!input.name || !input.features) {
       setError('Lütfen ürün adı ve özelliklerini doldurun.');
       return;
@@ -55,14 +53,6 @@ const App: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar currentView={view} onViewChange={setView} />
       
-      {apiKeyMissing && view === ViewMode.GENERATOR && (
-        <div className="bg-amber-50 border-b border-amber-200 p-4 text-center">
-          <p className="text-amber-800 text-sm font-medium">
-            ⚠️ <strong>Dikkat:</strong> API anahtarı algılanamadı. Uygulamanın çalışması için geçerli bir Gemini API anahtarı gereklidir.
-          </p>
-        </div>
-      )}
-
       <main className="flex-grow">
         {view === ViewMode.DOCUMENTATION ? (
           <ProjectDocument />
@@ -77,7 +67,7 @@ const App: React.FC = () => {
                     İçerik <span className="text-blue-600">Üretin.</span>
                   </h1>
                   <p className="mt-4 text-lg text-gray-500">
-                    Ürün bilgilerini girin
+                    Ürün bilgilerini girin, profesyonel SEO metinlerini anında alın.
                   </p>
                 </div>
 
@@ -86,7 +76,7 @@ const App: React.FC = () => {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Ürün Adı</label>
                     <input
                       type="text"
-                      placeholder="Örn: Kadın Bot"
+                      placeholder="Örn: Air Pro Max V2"
                       value={input.name}
                       onChange={(e) => setInput({ ...input, name: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
@@ -134,7 +124,7 @@ const App: React.FC = () => {
 
                   <button
                     type="submit"
-                    disabled={loading || apiKeyMissing}
+                    disabled={loading}
                     className="w-full py-4 bg-black text-white font-bold rounded-2xl hover:bg-gray-800 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {loading ? (
@@ -208,7 +198,7 @@ const App: React.FC = () => {
                       </div>
 
                       <div className="pt-6 border-t border-gray-100">
-                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block mb-2">Meta Açıklama (Search Console)</span>
+                        <span className="text-xs font-bold text-gray-400 tracking-widest uppercase block mb-2">Meta Açıklama</span>
                         <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-xl italic">
                           "{result.metaDescription}"
                         </p>
@@ -216,7 +206,7 @@ const App: React.FC = () => {
 
                       <button 
                         onClick={() => {
-                          const text = `${result.title}\n\n${result.shortDescription}\n\n${result.storyDescription}\n\nTags: ${result.tags.join(', ')}`;
+                          const text = `${result.title}\n\n${result.shortDescription}\n\n${result.storyDescription}\n\nEtiketler: ${result.tags.join(', ')}`;
                           navigator.clipboard.writeText(text);
                           alert('İçerik panoya kopyalandı!');
                         }}
@@ -236,7 +226,7 @@ const App: React.FC = () => {
       <footer className="bg-white border-t border-gray-100 py-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-gray-400 text-sm">
-            © 2026 Best Shoes Content Generator Cem YILDIZ tarafından yapılmıştır. Tüm hakları saklıdır.
+            © 2026 Best Shoes Content Generator - Cem YILDIZ tarafından tasarlanmıştır.
           </p>
         </div>
       </footer>

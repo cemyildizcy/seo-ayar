@@ -6,9 +6,9 @@ export class GeminiService {
   private ai: GoogleGenAI;
 
   constructor() {
-    // Tarayıcı ortamında process.env bulunmayabileceği için güvenli kontrol
-    const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : '';
-    this.ai = new GoogleGenAI({ apiKey: apiKey || '' });
+    // Global process nesnesi artık index.html'de tanımlandığı için güvenle erişilebilir
+    const apiKey = window.process?.env?.API_KEY || '';
+    this.ai = new GoogleGenAI({ apiKey: apiKey });
   }
 
   async generateProductContent(input: ProductInput): Promise<GeneratedContent> {
